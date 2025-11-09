@@ -1,5 +1,8 @@
 name: Daily NationStates Check
 
+permissions:
+  contents: write  # Allow pushing changes back to the repository
+
 on:
   schedule:
     # Run daily at 12:00 UTC (adjust timezone as needed)
