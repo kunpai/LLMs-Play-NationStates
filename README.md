@@ -43,7 +43,7 @@ This project is an AI-powered simulator for NationStates, a nation simulation ga
 
 ## Setup
 
-1. Create a `.env` file in the project root with your NationStates credentials:
+1. Create a `.env` file in the project root with your NationStates credentials (see `.env.example` for a template):
    ```
    NATION=your_nation_name
    PASSWORD=your_password
@@ -53,6 +53,12 @@ This project is an AI-powered simulator for NationStates, a nation simulation ga
    OLLAMA_MODEL=llama3.2:3b
    MAX_RETRIES=3
    LOG_REASONING=false
+   ```
+   
+   Or copy the example file:
+   ```bash
+   cp .env.example .env
+   # Then edit .env with your credentials
    ```
 
 2. Ensure Ollama is running:
