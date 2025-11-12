@@ -50,6 +50,9 @@ This project is an AI-powered simulator for NationStates, a nation simulation ga
    USER_AGENT=Your App Name/1.0 (contact@example.com)
    SLEEP_BETWEEN_REQUESTS=10
    TEST_MODE=false
+   OLLAMA_MODEL=llama3.2:3b
+   MAX_RETRIES=3
+   LOG_REASONING=false
    ```
 
 2. Ensure Ollama is running:
@@ -67,6 +70,25 @@ python main.py
 In test mode (set `TEST_MODE=true` in `.env`), it will log decisions without submitting them.
 
 The script checks for new issues every hour. Decisions are logged to `choices.ndjson`.
+
+### Using Different AI Models
+
+You can use different Ollama models by setting the `OLLAMA_MODEL` environment variable. First, pull the model:
+
+```bash
+ollama pull llama3.1:8b
+```
+
+Then update your `.env` file:
+```
+OLLAMA_MODEL=llama3.1:8b
+```
+
+Popular models to try:
+- `llama3.2:3b` - Default, fast and efficient
+- `llama3.1:8b` - More capable, slower
+- `mistral:7b` - Alternative model with different decision-making style
+- `gemma2:9b` - Google's model
 
 ## Configuration
 
@@ -117,6 +139,18 @@ This will:
 - Save statistics to `nation_stats.ndjson` for historical tracking
 
 Run this periodically (e.g., daily) to build a historical record of how your nation evolves based on the AI's decisions.
+
+## Example Workflow
+
+Here's a typical workflow for using the simulator:
+
+1. **Initial Setup**: Configure your `.env` file and start Ollama
+2. **Test Run**: Set `TEST_MODE=true` and run `python main.py` to verify everything works
+3. **Production Run**: Set `TEST_MODE=false` and let the script run continuously or in single-run mode
+4. **Analyze Decisions**: Run `python analytics.py` to see decision patterns and AI performance
+5. **Track Progress**: Run `python stats_tracker.py` daily to monitor your nation's evolution
+6. **Experiment with Models**: Try different `OLLAMA_MODEL` values to see how different AIs govern
+7. **Enable Reasoning**: Set `LOG_REASONING=true` to understand why the AI makes certain choices
 
 ## Automated Daily Runs (GitHub Actions)
 
