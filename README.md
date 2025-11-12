@@ -5,10 +5,15 @@ This project is an AI-powered simulator for NationStates, a nation simulation ga
 ## Features
 
 - Automatically fetches and responds to NationStates issues
-- Uses AI (Llama 3.2 3B model) to choose the best policy options
+- Uses AI (configurable Ollama models) to choose the best policy options
 - Logs all decisions to an NDJSON file for analysis
 - Supports test mode for safe experimentation
 - Rate-limited to respect NationStates API guidelines
+- **NEW**: Analytics script to analyze decision patterns and AI performance
+- **NEW**: Configurable LLM model support (not just llama3.2:3b)
+- **NEW**: Optional decision reasoning logging to understand AI choices
+- **NEW**: Retry logic for improved API reliability
+- **NEW**: Nation statistics tracking to monitor your nation's progress over time
 
 ## Prerequisites
 
@@ -70,6 +75,9 @@ The script checks for new issues every hour. Decisions are logged to `choices.nd
 - `USER_AGENT`: A descriptive user agent for API requests
 - `SLEEP_BETWEEN_REQUESTS`: Seconds to wait between API calls (default: 10)
 - `TEST_MODE`: Set to `true` to test without submitting answers
+- `OLLAMA_MODEL`: Ollama model to use (default: llama3.2:3b)
+- `MAX_RETRIES`: Number of retry attempts for API calls (default: 3)
+- `LOG_REASONING`: Set to `true` to log AI reasoning for decisions (default: false)
 
 ## Logging
 
@@ -78,6 +86,37 @@ All decisions are logged to `choices.ndjson` in NDJSON format, including:
 - Issue ID and text
 - Chosen option
 - Selection method (AI or random fallback)
+- AI reasoning (if `LOG_REASONING=true`)
+
+## Analytics
+
+Analyze your decision history using the analytics script:
+
+```bash
+python analytics.py
+```
+
+This will show:
+- Total decisions made
+- AI vs random decision breakdown
+- Issue category trends
+- Recent decisions with details
+- AI success rate
+
+## Nation Statistics Tracking
+
+Track your nation's statistics over time:
+
+```bash
+python stats_tracker.py
+```
+
+This will:
+- Fetch current nation statistics (population, GDP, freedoms, etc.)
+- Compare with previous statistics to show changes
+- Save statistics to `nation_stats.ndjson` for historical tracking
+
+Run this periodically (e.g., daily) to build a historical record of how your nation evolves based on the AI's decisions.
 
 ## Automated Daily Runs (GitHub Actions)
 
