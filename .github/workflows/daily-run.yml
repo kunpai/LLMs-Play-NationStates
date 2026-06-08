@@ -33,10 +33,30 @@ jobs:
       run: |
         curl -fsSL https://ollama.com/install.sh | sh
 
-    - name: Start Ollama service
+    - name: Ensure Ollama API is available
       run: |
-        ollama serve &
-        sleep 10  # Wait for Ollama to start
+        if ! curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then
+          ollama serve >/tmp/ollama.log 2>&1 &
+        fi
+
+        timeout_seconds=30
+        ready=false
+        for _ in $(seq 1 "$timeout_seconds"); do
+          if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then
+            ready=true
+            break
+          fi
+          sleep 1
+        done
+
+        if [ "$ready" != "true" ]; then
+          echo "Timeout: Ollama API did not become available after ${timeout_seconds} seconds."
+          if [ -f /tmp/ollama.log ]; then
+            echo "Ollama startup logs:"
+            cat /tmp/ollama.log
+          fi
+          exit 1
+        fi
 
     - name: Pull Llama model
       run: |
