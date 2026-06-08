@@ -37,8 +37,16 @@ jobs:
       run: |
         if ! curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then
           ollama serve >/tmp/ollama.log 2>&1 &
-          sleep 10
         fi
+
+        for _ in {1..30}; do
+          if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then
+            break
+          fi
+          sleep 1
+        done
+
+        curl -fsS http://127.0.0.1:11434/api/tags >/dev/null
 
     - name: Pull Llama model
       run: |
