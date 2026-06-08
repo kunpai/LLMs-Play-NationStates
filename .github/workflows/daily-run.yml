@@ -39,8 +39,9 @@ jobs:
           ollama serve >/tmp/ollama.log 2>&1 &
         fi
 
+        timeout_seconds=30
         ready=false
-        for _ in {1..30}; do
+        for _ in $(seq 1 "$timeout_seconds"); do
           if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then
             ready=true
             break
@@ -49,7 +50,7 @@ jobs:
         done
 
         if [ "$ready" != "true" ]; then
-          echo "Timeout: Ollama API did not become available after 30 seconds."
+          echo "Timeout: Ollama API did not become available after ${timeout_seconds} seconds."
           if [ -f /tmp/ollama.log ]; then
             echo "Ollama startup logs:"
             cat /tmp/ollama.log
