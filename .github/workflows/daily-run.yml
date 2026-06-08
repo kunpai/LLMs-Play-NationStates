@@ -33,10 +33,12 @@ jobs:
       run: |
         curl -fsSL https://ollama.com/install.sh | sh
 
-    - name: Start Ollama service
+    - name: Ensure Ollama API is available
       run: |
-        ollama serve &
-        sleep 10  # Wait for Ollama to start
+        if ! curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then
+          ollama serve >/tmp/ollama.log 2>&1 &
+          sleep 10
+        fi
 
     - name: Pull Llama model
       run: |
